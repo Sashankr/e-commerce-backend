@@ -57,3 +57,46 @@ exports.login = async (req, res) => {
     // res.status(500).json(err);
   }
 };
+
+exports.updateUser = async (req, res) => {
+  if (req.body.password) {
+    req.body.password = CryptoJS.AES.encrypt(
+      password,
+      process.env.PASSWORD_SECRET_KEY
+    ).toString();
+  }
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json("User deleted successfully");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getUser = async (req, res) => {
+  try {
+    console.log(req.params);
+    const user = await User.findById(req.params.id);
+    const { password, ...others } = user._doc;
+    console.log(others);
+
+    res.status(200).json(others);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
