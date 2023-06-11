@@ -1,14 +1,6 @@
 const router = require("express").Router();
+const authController = require("../controllers/authController");
 
-router.get("/getUser", (req, res) => {
-  res.send("User test success");
-});
-
-router.post("/addUser", (req, res) => {
-  const { username } = req.body;
-  res.json({
-    message: "user created " + username,
-  });
-});
+router.post("/register", authController.register);
 
 module.exports = router;
