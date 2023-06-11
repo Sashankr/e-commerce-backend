@@ -25,8 +25,8 @@ app.get("/api/product/query/", async (req, res) => {
   try {
     const queryName = req.query.name;
     console.log(queryName);
-    const productsWithMatchingName = products.filter(
-      (item) => item.name.toLowerCase() === queryName.toLowerCase()
+    const productsWithMatchingName = products.filter((item) =>
+      item.name.toLowerCase().includes(queryName.toLowerCase())
     );
     if (productsWithMatchingName.length === 0 || !productsWithMatchingName) {
       return res.status(404).json({
