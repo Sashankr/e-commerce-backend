@@ -15,6 +15,9 @@ app.get("/api/products", (req, res) => {
 app.get("/api/products/:productID", (req, res) => {
   const productID = Number(req.params.productID);
   const filteredProducts = products.filter((item) => item.id === productID);
+  if (filteredProducts.length === 0 || !filteredProducts) {
+    return res.status(404).send("Product not found");
+  }
   res.json(filteredProducts);
 });
 
