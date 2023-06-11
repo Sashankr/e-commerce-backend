@@ -1,11 +1,15 @@
 const User = require("../models/User");
+const CryptoJS = require("crypto-js");
 
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
   const newUser = new User({
     username,
     email,
-    password,
+    password: CryptoJS.AES.encrypt(
+      password,
+      process.env.PASSWORD_SECRET_KEY
+    ).toString(),
   });
 
   try {
@@ -14,5 +18,30 @@ exports.register = async (req, res) => {
     res.status(201).json(savedUser);
   } catch (err) {
     res.status(500).json(err);
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const { username, password: currentPassword } = req.body;
+    const user = await User.findOne({ username: username });
+
+    if (!user) {
+      res.status(401).json("Wrong Credentials");
+    }
+    const userPassword = CryptoJS.AES.decrypt(
+      user.password,
+      process.env.PASSWORD_SECRET_KEY
+    ).toString(CryptoJS.enc.Utf8);
+
+    if (userPassword !== currentPassword) {
+      res.status(401).json("Wrong Credentials");
+    }
+
+    const { password, ...others } = user._doc;
+
+    res.status(200).json(others);
+  } catch (err) {
+    // res.status(500).json(err);
   }
 };
