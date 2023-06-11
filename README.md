@@ -1,6 +1,6 @@
 # E-Commerce-Website
 
-Node.js to understand how backend application works.
+Building this Node.js application to understand how backend application works using Javascript on the server.
 
 I learned about :
 
