@@ -1,4 +1,5 @@
 const express = require("express");
+const { products } = require("./src/helpers/mock");
 const port = 3000;
 
 const app = express();
@@ -8,11 +9,13 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/products", (req, res) => {
-  res.json([
-    { name: "iPhone", price: 600 },
-    { name: "iPad", price: 700 },
-    { name: "iWatch", price: 800 },
-  ]);
+  res.json(products);
+});
+
+app.get("/api/products/:productID", (req, res) => {
+  const productID = Number(req.params.productID);
+  const filteredProducts = products.filter((item) => item.id === productID);
+  res.json(filteredProducts);
 });
 
 app.listen(port, () => {
