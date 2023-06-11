@@ -21,6 +21,22 @@ app.get("/api/products/:productID", (req, res) => {
   res.json(filteredProducts);
 });
 
+app.get("/api/product/query/", async (req, res) => {
+  try {
+    const queryName = req.query.name;
+    console.log(queryName);
+    const productsWithMatchingName = products.filter(
+      (item) => item.name.toLowerCase() === queryName.toLowerCase()
+    );
+    if (productsWithMatchingName.length === 0 || !productsWithMatchingName) {
+      return res.status(404).send("Product with this query not found");
+    }
+    res.json(productsWithMatchingName);
+  } catch (err) {
+    res.json({ err: "Product not found with this query" });
+  }
+});
+
 app.listen(port, () => {
   console.log("Server running on port: " + port);
 });
