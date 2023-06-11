@@ -29,11 +29,13 @@ app.get("/api/product/query/", async (req, res) => {
       (item) => item.name.toLowerCase() === queryName.toLowerCase()
     );
     if (productsWithMatchingName.length === 0 || !productsWithMatchingName) {
-      return res.status(404).send("Product with this query not found");
+      return res.status(404).json({
+        message: "Product with this query not found",
+      });
     }
     res.json(productsWithMatchingName);
   } catch (err) {
-    res.json({ err: "Product not found with this query" });
+    res.json({ message: "Product not found with this query" });
   }
 });
 
