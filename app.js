@@ -1,5 +1,5 @@
 const express = require("express");
-const { products } = require("./src/helpers/mock");
+const { products } = require("./src/utils/mock");
 const port = 3000;
 
 const app = express();
